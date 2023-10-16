@@ -26,10 +26,10 @@ Route::prefix('auth')->group(function (){
 });
 
 Route::prefix('todo')->middleware('auth:api')->group(function (){
-
+    Route::get('/list',[TodoController::class,'index']);
+    Route::post('/store',[TodoController::class,'store']);
+    Route::get('/{id}/edit',[TodoController::class,'edit']);
+    Route::put('/{id}/update',[TodoController::class,'update']);
+    Route::delete('/{id}/delete',[TodoController::class,'destroy']);
 });
-Route::get('todo/list',[TodoController::class,'index']);
-Route::post('todo/store',[TodoController::class,'store']);
-Route::get('todo/{id}/edit',[TodoController::class,'edit']);
-Route::put('todo/{id}/update',[TodoController::class,'update']);
-Route::delete('todo/{id}/delete',[TodoController::class,'destroy']);
+

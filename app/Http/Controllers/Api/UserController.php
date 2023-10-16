@@ -33,7 +33,7 @@ class UserController extends Controller
 
         if(auth()->attempt(['email' => $request->email,'password'=>$request->password])){
             $user = auth()->user();
-            $token = $user->createToken('auth_token')->plainTextToken;
+            $token = $user->createToken('api_case')->accessToken;
             return apiResponse(__('Giriş Yapıldı'),200,['token'=>$token,'user'=>$user]);
         }
             return apiResponse(__('UNAUTHORIZED'),401);

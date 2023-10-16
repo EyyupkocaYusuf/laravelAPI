@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\TodoRequest;
 use App\Http\Resources\TodoResource;
 use App\Services\TodoService;
 use Illuminate\Http\Request;
@@ -28,40 +29,19 @@ class TodoController extends Controller
         return apiResponse(__('todo bulundu'),200,$todo);
     }
 
-    public function store(Request $request)
+    public function store(TodoRequest $request)
     {
         $data = $request->all();
-        $validator = Validator::make($data, [
-            'name' => 'required|min:5'
-        ],[
-            'name.required'=>'İsim alanı zorunludur',
-            'name.min'=>'En az 5 karakter olmak zorundadır',
-        ]);
-
-        if($validator->fails()) {
-            return apiResponse(__('Validation Error'),401,['errors'=>$validator->errors()]);
-        }
 
         $todo = $this->todoService->store($data);
         return apiResponse(__('Todo Eklendi'),200,$todo);
     }
 
-    public function update($id,Request $request)
+    public function update($id,TodoRequest $request)
     {
         $data = $request->all();
-        $validator = Validator::make($data, [
-            'name' => 'required|min:5'
-        ],[
-            'name.required'=>'İsim alanı zorunludur',
-            'name.min'=>'En az 5 karakter olmak zorundadır',
-        ]);
-
-        if($validator->fails()) {
-            return apiResponse(__('Validation Error'),401,['errors'=>$validator->errors()]);
-        }
 
         $this->todoService->update($id,$data);
-
         $todo = $this->todoService->find($id);
         return apiResponse(__('Todo Güncellendi'),200,$todo);
     }
