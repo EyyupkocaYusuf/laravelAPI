@@ -19,11 +19,10 @@ class TodoController extends Controller
     }
     public function index()
     {
-        $todos = TodoResource::collection($this->todoService->getAll());
-        return apiResponse(__('Listeleme Yapıldı'),200,$todos);
+        return $this->todoService->getAll();
     }
 
-    public function edit($id,Request $request)
+    public function edit($id)
     {
         $todo = $this->todoService->find($id);
         return apiResponse(__('todo bulundu'),200,$todo);
@@ -40,15 +39,19 @@ class TodoController extends Controller
     public function update($id,TodoRequest $request)
     {
         $data = $request->all();
-
-        $this->todoService->update($id,$data);
         $todo = $this->todoService->find($id);
+        if(!isset($todo))
+        {
+            return apiResponse(__('Bu degerlere sahip bir todo bulunamadı'),404,$todo);
+        }
+        $this->todoService->update($id,$data);
+
         return apiResponse(__('Todo Güncellendi'),200,$todo);
     }
 
     public function destroy($id)
     {
-        $this->todoService->destroy($id);
-        return apiResponse(__('Todo Silindi'),200);
+        return $this->todoService->destroy($id);
+
     }
 }

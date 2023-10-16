@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Http\Resources\TodoResource;
 use App\Repositories\TodoRepository;
 use Illuminate\Support\Facades\Request;
 
@@ -14,7 +15,13 @@ class TodoService
     }
     public function getAll()
     {
-        return $this->todoRepository->getAll();
+        $todos = TodoResource::collection($this->todoRepository->getAll());
+        if($todos->count() > 0)
+        {
+            return apiResponse(__('Listeleme Yapıldı'),200,$todos);
+        }
+        return apiResponse(__('Hic todo yok'),200,$todos);
+
     }
 
     public function find($id)
@@ -34,6 +41,12 @@ class TodoService
 
     public function destroy($id)
     {
-        return $this->todoRepository->destroy($id);
+        $todo = $this->todoRepository->find($id);
+        if(!isset($todo))
+        {
+            return apiResponse(__('Bu degerlere sahip bir todo bulunamadı'),404,$todo);
+        }
+        $this->todoRepository->destroy($id);
+        return apiResponse(__('Todo Silindi'),200);
     }
 }
