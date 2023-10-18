@@ -34,6 +34,7 @@ class TodoRepository
 
     public function update($id,$data)
     {
+
         return $this->model->where('id',$id)->update([
             'name' => $data['name'],
             'completed' => $data['completed']

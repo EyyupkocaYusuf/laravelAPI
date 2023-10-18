@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Http\Resources\TodoResource;
 use App\Repositories\TodoRepository;
 use Illuminate\Support\Facades\Request;
+use function PHPUnit\Framework\isEmpty;
 
 class TodoService
 {
@@ -27,6 +28,7 @@ class TodoService
     public function find($id)
     {
         return $this->todoRepository->find($id);
+
     }
 
     public function store($data)
