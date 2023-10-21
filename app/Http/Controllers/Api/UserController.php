@@ -3,22 +3,27 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\UserRegisterRequest;
 use App\Models\User;
+use App\Services\UserServices;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
-    public function register(Request $request)
-    {
-        $requestData = $request->all();
+    protected $userServices;
 
-        $data = User::create([
-            'name' => $requestData['name'],
-            'email' => $requestData['email'],
-            'password' => Hash::make($requestData['password'])
-        ]);
-        return apiResponse('Message',200,$data);
+    public function __construct(UserServices $userServices)
+    {
+        $this->userServices = $userServices;
+    }
+
+    public function register(UserRegisterRequest $request)
+    {
+        $data = $request->all();
+        $user = $this->userServices->register($data);
+
+        return apiResponse(__('Kayıt Başarılı Bir Şekilde Oluşturuldu.'),200,['user' => $user]);
     }
 
     public function login(Request $request)
